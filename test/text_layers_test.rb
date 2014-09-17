@@ -37,15 +37,15 @@ end
 
 test "two layers, one line, different size" do
   frame = Frame.new
-  frame[1] = "123"
-  frame[2] = "abcdef"
+  frame[2] = "123"
+  frame[5] = "abcdef"
   assert_equal frame.to_s, "abcdef"
 end
 
 test "two layers, one line, different size" do
   frame = Frame.new
-  frame[2] = "123"
-  frame[1] = "abcdef"
+  frame[6] = "123"
+  frame[3] = "abcdef"
   assert_equal frame.to_s, "123def"
 end
 
@@ -73,11 +73,27 @@ TWO
 111111
 11111
 ONE
-  
+
   res = <<RES.chomp
 3231111
 232121
 33321
 RES
   assert_equal frame.to_s, res
+end
+
+
+test "re-rendering frames" do
+  frame = Frame.new
+  frame[2] = "two"
+  frame[1] = "one"
+  frame.to_s
+  
+  frame[2] = "* *"
+  frame.to_s
+
+  frame[8] = "   #"
+  res = frame.to_s
+  
+  assert_equal res, "*n*#"
 end
