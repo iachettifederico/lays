@@ -1,6 +1,6 @@
 # Lays
 
-TODO: Write a gem description
+Layered text frames for TRecs
 
 ## Installation
 
