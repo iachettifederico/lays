@@ -58,27 +58,27 @@ end
 
 test "three layers, three lines" do
   frame = Frame.new
-  frame[3] = <<THREE
+  frame[3] = <<-THREE
 3 3
  3
 333
-THREE
-  frame[2] = <<TWO
+  THREE
+  frame[2] = <<-TWO
 22
 222 2
  222
-TWO
-  frame[1] = <<ONE
+  TWO
+  frame[1] = <<-ONE
 1111111
 111111
 11111
-ONE
+  ONE
 
-  res = <<RES.chomp
+  res = <<-RES.chomp
 3231111
 232121
 33321
-RES
+  RES
   assert_equal frame.to_s, res
 end
 
@@ -88,12 +88,33 @@ test "re-rendering frames" do
   frame[2] = "two"
   frame[1] = "one"
   frame.to_s
-  
+
   frame[2] = "* *"
   frame.to_s
 
   frame[8] = "   #"
   res = frame.to_s
-  
+
   assert_equal res, "*n*#"
+end
+
+scope do
+  # Transparency
+  test "transparent char" do
+    frame = Frame.new
+
+    frame[6] = "0=0 0"
+    frame[6].transparent = "="
+    frame[3] = "11111"
+    assert_equal frame.to_s, "010 0"
+  end
+
+  test "setting transparent char beforehand" do
+    frame = Frame.new
+
+    frame[6].transparent = "#"
+    frame[6] = "2 # 2"
+    frame[3] = "11111"
+    assert_equal frame.to_s, "2 1 2"
+  end
 end
