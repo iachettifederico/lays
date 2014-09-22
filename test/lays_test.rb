@@ -2,7 +2,7 @@ require_relative "./test_helper"
 
 Frame = Struct.new(:content) do
   include Lays
-  def initialize(**attrs)
+  def initialize(attrs={})
     attrs.each do |attr, val|
       self.send("#{attr}=", val)
     end
