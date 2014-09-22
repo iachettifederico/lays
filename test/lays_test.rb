@@ -99,12 +99,19 @@ test "re-rendering frames" do
 end
 
 scope do
+  # width and height
+  test "width" do
+
+  end
+end
+
+scope do
   # Transparency
   test "transparent char" do
     frame = Frame.new
 
     frame[6] = "0=0 0"
-    frame[6].transparent = "="
+    frame[6].transparent_char = "="
     frame[3] = "11111"
     assert_equal frame.to_s, "010 0"
   end
@@ -112,9 +119,34 @@ scope do
   test "setting transparent char beforehand" do
     frame = Frame.new
 
-    frame[6].transparent = "#"
+    frame[6].transparent_char = "#"
     frame[6] = "2 # 2"
     frame[3] = "11111"
     assert_equal frame.to_s, "2 1 2"
   end
+
+  test "setting global transparent char for frame" do
+    frame = Frame.new
+    frame.transparent_char = "$"
+
+    frame[6] = "2 $ 2"
+    frame[3] = "11111"
+    assert_equal frame.to_s, "2 1 2"
+  end
+
+  test "full transparency example" do
+    frame = Frame.new
+    frame.transparent_char = "$"
+
+    frame[9].transparent_char = "*"
+    frame[6].transparent_char = "%"
+
+    frame[9] =               "3**$***3 "
+    frame[6] =               "22%2$%%2 "
+    frame[3] =               "11111$$1 "
+    frame[1] =               "000000$0 "
+    assert_equal frame.to_s, "321$$0 3 "
+
+  end
+
 end
