@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/iachettifederico/lays.png?branch=master)](https://travis-ci.org/iachettifederico/lays)
+
 # Lays
 
 Layered text frames for TRecs
