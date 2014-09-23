@@ -100,8 +100,20 @@ end
 
 scope do
   # width and height
-  test "width" do
+  setup do
+    frame = Frame.new
+    frame[3] = "a"
+    frame[2] = "bcde"
+    frame[1] = "fg"
+    frame
+  end
 
+  test "width" do |frame|
+    assert_equal frame.width, 4
+  end
+
+  test "height" do |frame|
+    assert_equal frame.height, 3
   end
 end
 

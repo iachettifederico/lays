@@ -53,6 +53,16 @@ module Lays
     result.map {|a|a.join}.join("\n")
   end
 
+  def height
+    layers.count
+  end
+
+  def width
+    layers.max { |a, b|
+      a.last.content.size <=> b.last.content.size
+    }.last.content.size
+  end
+  
   def transparent_char=(char)
     @transparent_char = char
   end
