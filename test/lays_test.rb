@@ -162,3 +162,82 @@ scope do
   end
 
 end
+
+scope do
+  # Space
+  test "space char" do
+    frame = Frame.new
+
+    frame[6] = "0=0 0"
+    frame[6].space_char = "="
+    frame[3] = "11111"
+    assert_equal frame.to_s, "0 010"
+  end
+
+
+  test "setting space char beforehand" do
+    frame = Frame.new
+
+    frame[6].space_char = "#"
+    frame[6] = "2 # 2"
+    frame[3] = "11111"
+    assert_equal frame.to_s, "21 12"
+  end
+
+  test "setting global space char for frame" do
+    frame = Frame.new
+    frame.space_char = "$"
+
+    frame[6] = "2 $ 2"
+    frame[3] = "11111"
+    assert_equal frame.to_s, "21 12"
+  end
+
+  test "full space example" do
+    frame = Frame.new
+    frame.space_char = "$"
+
+    frame[9].space_char = "*"
+    frame[6].space_char = "%"
+
+    frame[9] =               "3**$***3 "
+    frame[6] =               "22%2$%%2 "
+    frame[3] =               "11111$$1 "
+    frame[1] =               "000000$00"
+    assert_equal frame.to_s, "3      30"
+  end
+end
+
+scope do
+  test "Space and Transparency" do
+    frame = Frame.new
+    frame.space_char       = "-"
+    frame.transparent_char = "."
+
+
+    frame[9].space_char       = "_"
+    frame[6].transparent_char = ","
+
+    frame[9] =               "3 .,..-_. "
+    frame[6] =               "2222,,22--"
+    frame[3] =               "11111.1111"
+    frame[1] =               "0000000000"
+    assert_equal frame.to_s, "3 2,10- - "
+  end
+
+  test "Space and Transparency" do
+    frame = Frame.new
+    frame.transparent_char = "."
+    frame.space_char       = "-"
+
+
+    frame[6].transparent_char = ","
+    frame[9].space_char       = "_"
+
+    frame[9] =               "3 .,..-_. "
+    frame[6] =               "2222,,22--"
+    frame[3] =               "11111.1111"
+    frame[1] =               "0000000000"
+    assert_equal frame.to_s, "32.,..  . "
+  end
+end

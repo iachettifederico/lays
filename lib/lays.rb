@@ -3,10 +3,10 @@ require "ostruct"
 
 module Lays
 
-  Layer = Struct.new(:content, :transparent_char) do
+  Layer = Struct.new(:content, :transparent_char, :space_char) do
     def initialize(attrs={})
       attrs.each do |attr, val|
-        self.send("#{attr}=", val)
+        self.send("self.#{attr}=", val)
       end
     end
   end
@@ -42,7 +42,9 @@ module Lays
       content.split("\n").each_with_index.map do |line, i|
         line.each_char.each_with_index do |c, j|
           result[i] ||= []
-          if !transparent_char_for(layer, c)
+          if space_char_for(layer, c)
+            result[i][j] = " "
+          elsif !transparent_char_for(layer, c)
             result[i][j] = c
           elsif key == lays.first.first
             result[i][j] = " "
@@ -62,9 +64,10 @@ module Lays
       a.last.content.size <=> b.last.content.size
     }.last.content.size
   end
-  
+
   def transparent_char=(char)
     @transparent_char = char
+    @space_char = nil
   end
 
   def transparent_char
@@ -74,5 +77,18 @@ module Lays
   def transparent_char_for(layer, char)
     transparent = layer.transparent_char || transparent_char
     char == transparent
+  end
+
+  def space_char=(char)
+    @space_char = char
+    @transparent_char = nil
+  end
+
+  def space_char
+    @space_char
+  end
+
+  def space_char_for(layer, char)
+    char == layer.space_char || char == space_char
   end
 end
