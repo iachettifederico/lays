@@ -39,21 +39,30 @@ module Lays
     result = []
     lays = layers.sort {|a, b| a[0] <=> b[0] }
     lays.each do |key, layer|
-      content = layer.content
-      content.split("\n").each_with_index.map do |line, i|
-        line.each_char.each_with_index do |c, j|
-          result[i] ||= []
-          if space_char_for(layer, c)
-            result[i][j] = " "
-          elsif !transparent_char_for(layer, c)
-            result[i][j] = c
-          elsif key == lays.first.first
-            result[i][j] = " "
-          end
+      each_char_for(layer) do |layer, char, line_num, col_num|
+        result[line_num] ||= []
+        if space_char_for(layer, char)
+          result[line_num][col_num] = " "
+        elsif !transparent_char_for(layer, char)
+          result[line_num][col_num] = char
+        elsif key == lays.first.first
+          result[line_num][col_num] = " "
         end
       end
     end
-    result.map {|a|a.join}.join("\n")
+    result.map {|line|
+      line.join
+    }.join("\n")
+  end
+
+  def each_char_for(layer, &block)
+    content = layer.content
+    content.split("\n").each_with_index.map do |line, line_num|
+      line.each_char.each_with_index do |char, col_num|
+        block.call(layer, char, line_num, col_num)
+      end
+    end
+
   end
 
   def height
