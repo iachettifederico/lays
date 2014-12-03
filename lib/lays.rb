@@ -55,16 +55,6 @@ module Lays
     }.join("\n")
   end
 
-  def each_char_for(layer, &block)
-    content = layer.content
-    content.split("\n").each_with_index.map do |line, line_num|
-      line.each_char.each_with_index do |char, col_num|
-        block.call(layer, char, line_num, col_num)
-      end
-    end
-
-  end
-
   def height
     layers.count
   end
@@ -84,11 +74,6 @@ module Lays
     @transparent_char ||= " "
   end
 
-  def transparent_char_for(layer, char)
-    transparent = layer.transparent_char || transparent_char
-    char == transparent
-  end
-
   def space_char=(char)
     @space_char = char
     @transparent_char = nil
@@ -96,6 +81,23 @@ module Lays
 
   def space_char
     @space_char
+  end
+
+  private
+
+  def each_char_for(layer, &block)
+    content = layer.content
+    content.split("\n").each_with_index.map do |line, line_num|
+      line.each_char.each_with_index do |char, col_num|
+        block.call(layer, char, line_num, col_num)
+      end
+    end
+
+  end
+
+  def transparent_char_for(layer, char)
+    transparent = layer.transparent_char || transparent_char
+    char == transparent
   end
 
   def space_char_for(layer, char)
