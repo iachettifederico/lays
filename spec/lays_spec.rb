@@ -1,4 +1,4 @@
-require_relative "./test_helper"
+require "spec_helper"
 
 Frame = Struct.new(:content) do
   include Lays
@@ -8,6 +8,7 @@ Frame = Struct.new(:content) do
     end
   end
 end
+
 scope do
   test "one layer, one line" do
     @frame = Frame.new
@@ -74,12 +75,12 @@ scope do
 11111
   ONE
 
-    res = <<-RES.chomp
+    @res = <<-RES.chomp
 3231111
 232121
 33321
   RES
-    @frame.to_s == res
+    @frame.to_s == @res
   end
 
 
@@ -93,9 +94,9 @@ scope do
     @frame.to_s
 
     @frame[8] = "   #"
-    res = @frame.to_s
+    @res = @frame.to_s
 
-    res == "*n*#"
+    @res == "*n*#"
   end
 
   scope "width and height" do
